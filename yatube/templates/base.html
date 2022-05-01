@@ -1,0 +1,15 @@
+<body>
+  <title>{% block title %}имя вкладки{% endblock %}</title>
+    <header>
+      {% include "includes/header.html" %}
+    </header>
+    <main> 
+      {% block content %} 
+      Здесь могла быть ваша реклама
+      {% endblock %} 
+    </main>        
+    <footer class="border-top text-center py-3">
+      {% include "includes/footer.html" %}   
+    </footer>
+  </body>
+</html>
