@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base2.html" %} 
 {% block title %}
   {% if is_edit %}
   Редактировать
@@ -6,21 +6,20 @@
     Новый пост
   {% endif %}
 {% endblock %}
-{% block content %}
-{% include "includes/error.html" %}
-{% if is_edit %}
-Редактировать
-{% else %}
-Новый пост
-{% endif %}            
-</div>
-<div class="card-body"> 
+{% block contentheader %}
+  {% include "includes/error.html" %}
+  {% if is_edit %}
+    Редактировать
+  {% else %}
+    Новый пост
+  {% endif %}            
+  {% endblock %}
+{% block contentbody %}   
   {% if is_edit %}       
     <form method="post" action="{% url 'posts:post_edit' post.id %}">
   {% else %}
     <form method="post" action="{% url 'posts:post_create' %}">
-  {% endif%}
-    
+  {% endif%}    
     {% csrf_token %}
     {% include "includes/form.html" %}
     <div class="d-flex justify-content-end">
@@ -30,8 +29,7 @@
         {% else %}
           Добавить
         {% endif %}               
-      </button> 
-  
+      </button>   
     </div>
   </form>
 {% endblock %}
