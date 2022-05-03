@@ -1,13 +1,18 @@
-<body>
-  <title>{% block title %}имя вкладки{% endblock %}</title>
+<!DOCTYPE html>
+<html lang="ru">
+  {% load static %}
+  {% include "includes/head.html" %}
+  <title>{% block title %}Имя вкладки{% endblock %}</title>
+  </head>
+  <body>
     <header>
       {% include "includes/header.html" %}
     </header>
-    <main> 
+    <main>       
       {% block content %} 
-      Здесь могла быть ваша реклама
+        Контент вставлять сюда
       {% endblock %} 
-    </main>        
+    </main>
     <footer class="border-top text-center py-3">
       {% include "includes/footer.html" %}   
     </footer>

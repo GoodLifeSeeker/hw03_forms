@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qoyz9ok^(83ao92!e0qpxvg!b&)c)ls%e(6dyxxo9f*vp8$a^u'
+SECRET_KEY = 'j3a9ek9df#ee)ux8dcq0)r+u1wq8uqv#v56isw99m&a94g9*fx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
-    'about.apps.AboutConfig',
 ]
 
 MIDDLEWARE = [
@@ -42,11 +41,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'yatube.urls'
-
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,14 +111,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (STATICFILES_DIR,)
 
 LOGIN_URL = 'users:login'
-
 LOGIN_REDIRECT_URL = 'posts:index'
 
-LOGOUT_REDIRECT_URL = 'posts:index'
-
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')

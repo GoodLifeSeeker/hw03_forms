@@ -1,20 +1,18 @@
-{% extends "base2.html" %} 
+{% extends "base.html" %} 
 {% block title %}
-  {% if is_edit %}
-  Редактировать
-  {% else %}
-    Новый пост
-  {% endif %}
-{% endblock %}
-{% block contentheader %}
-  {% include "includes/error.html" %}
   {% if is_edit %}
     Редактировать
   {% else %}
     Новый пост
-  {% endif %}            
-  {% endblock %}
-{% block contentbody %}   
+  {% endif %}
+{% endblock %}
+{% block content %}
+{% include "includes/error.html" %}
+  {% if is_edit %}
+    Редактировать
+  {% else %}
+    Новый пост
+  {% endif %}              
   {% if is_edit %}       
     <form method="post" action="{% url 'posts:post_edit' post.id %}">
   {% else %}

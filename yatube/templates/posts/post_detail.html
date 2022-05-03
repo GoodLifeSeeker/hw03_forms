@@ -1,35 +1,9 @@
-{% extends "base2.html" %} 
+{% extends "base.html" %}
 {% block title %}
-  {% if is_edit %}
-  Редактировать
-  {% else %}
-    Новый пост
-  {% endif %}
+  {{ posts.text|truncatechars:30 }}
 {% endblock %}
-{% block contentheader %}
-  {% include "includes/error.html" %}
-  {% if is_edit %}
-    Редактировать
-  {% else %}
-    Новый пост
-  {% endif %}            
-{% endblock %}
-{% block contentbody %} 
-  {% if is_edit %}       
-    <form method="post" action="{% url 'posts:post_edit' post.id %}">
-  {% else %}
-    <form method="post" action="{% url 'posts:post_create' %}">
-  {% endif%}
-    {% csrf_token %}
-    {% include "includes/form.html" %}
-    <div class="d-flex justify-content-end">
-      <button type="submit" class="btn btn-primary">
-        {% if is_edit %}
-          Сохранить
-        {% else %}
-          Добавить
-        {% endif %}               
-      </button> 
-    </div>
-  </form>
+{% block content %}
+  <h2><p>Всего постов пользователя: <span>{{ posts.author.posts.count}}</span></p></h2>
+  Текущий пост: <br>
+  {{ posts.text }}
 {% endblock %}

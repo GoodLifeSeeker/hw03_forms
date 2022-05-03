@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Group, Post, User
 from .forms import PostForm
@@ -12,18 +12,6 @@ def index(request):
     template = 'posts/index.html'
     title = 'Последние записи'
     posts = Post.objects.all()
-    keyword = request.GET.get('q', None)
-
-    if keyword:
-        posts = list((Post.objects.select_related('author', 'group')
-                      .filter(text__contains=keyword)))
-        if posts:
-            title = 'Найдено:'
-            posts = (Post.objects.select_related('author', 'group')
-                     .filter(text__contains=keyword))
-        else:
-            title = 'По вашему запросу ничего не найдено.'
-
     paginator = Paginator(posts, NUMBER_OF_POSTS)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -31,23 +19,22 @@ def index(request):
         'posts': posts,
         'title': title,
         'page_obj': page_obj,
-        'keyword': keyword
     }
     return render(request, template, context)
 
 
 def group_posts(request, slug):
+    group = get_object_or_404(Group, slug=slug)
     template = 'posts/group_list.html'
     title = 'Записи сообщества '
-    group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all()[:NUMBER_OF_POSTS]
+    posts = group.posts.all()
     paginator = Paginator(posts, NUMBER_OF_POSTS)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
         'title': title,
-        'posts': posts,
         'group': group,
+        'posts': posts,
         'page_obj': page_obj,
     }
     return render(request, template, context)
@@ -61,19 +48,23 @@ def profile(request, username):
     paginator = Paginator(posts, NUMBER_OF_POSTS)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    posts_count = posts.count()
-    context = {'title': title,
-               'author': author,
-               'posts_count': posts_count,
-               'page_obj': page_obj,
-               'posts': posts}
+    post_counter = posts.count()
+    context = {
+        'title': title,
+        'author': author,
+        'posts': posts,
+        'page_obj': page_obj,
+        'post_counter': post_counter,
+    }
     return render(request, template, context)
 
 
 def post_detail(request, post_id):
     template = 'posts/post_detail.html'
-    post = Post.objects.get(pk=post_id)
-    context = {'post': post}
+    posts = Post.objects.get(pk=post_id)
+    context = {
+        'posts': posts,
+    }
     return render(request, template, context)
 
 
@@ -88,9 +79,11 @@ def post_create(request):
         new_post.save()
         return redirect('posts:profile', request.user)
     else:
-        context = {'form': form,
-                   'is_edit': is_edit}
-        return render(request, template, context)
+        context = {
+            'form': form,
+            'is_edit': is_edit,
+        }
+    return render(request, template, context)
 
 
 @login_required
@@ -104,15 +97,18 @@ def post_edit(request, post_id):
             form.save()
             return redirect('posts:post_detail', post_id)
         else:
-            context = {'form': form,
-                       'is_edit': is_edit}
+            context = {
+                'form': form,
+                'is_edit': is_edit,
+            }
             return render(request, template, context)
+    elif request.user.id == post.author.id:
+        form = PostForm(instance=post)
+        context = {
+            'form': form,
+            'post': post,
+            'is_edit': is_edit,
+        }
+        return render(request, template, context)
     else:
-        if request.user.id == post.author.id:
-            form = PostForm(instance=post)
-            context = {'form': form,
-                       'post': post,
-                       'is_edit': is_edit}
-            return render(request, template, context)
-        else:
-            return redirect('posts:post_detail', post_id)
+        return redirect('posts:post_detail', post_id)

@@ -7,5 +7,6 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ('text', 'group')
         labels = {
-            'text': ('Введите текст поста'),
-            'group': ('группа:')}
+            'text': ('Тут пишите буквы'),
+            'group': ('группа:'),
+        }
