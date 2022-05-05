@@ -93,8 +93,8 @@ def post_edit(request, post_id):
         form.save()
         return redirect(redir_template, post_id)
     context = {
-    'form': form,
-    'post': post,
-    'is_edit': is_edit,
+        'form': form,
+        'post': post,
+        'is_edit': is_edit,
     }
     return render(request, template, context)
