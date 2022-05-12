@@ -15,21 +15,21 @@ class PostPagesTests(TestCase):
         super().setUpClass()
         cls.user = User.objects.create_user(username='auth')
         cls.group = Group.objects.create(
-            title = 'Тестовая группа раз',
-            description = 'Тестовое описание группы',
-            slug = 'test-slug'
+            title='Тестовая группа раз',
+            description='Тестовое описание группы',
+            slug='test-slug'
         )
         cls.post = Post.objects.create(
-            author = cls.user,
+            author=cls.user,
             text='Тестовый текст',
-            pub_date = 'Тестовая дата',
+            pub_date='Тестовая дата',
             group=cls.group,
         )
         cls.group2 = Group.objects.create(
-            title = 'Тестовая группа два',
-            description = 'Тестовое описание группы',
-            slug = 'test-slug2'
-        )  
+            title='Тестовая группа два',
+            description='Тестовое описание группы',
+            slug='test-slug2'
+        )
 
     def setUp(self):
         self.authorized_client = Client()
@@ -85,7 +85,8 @@ class PostPagesTests(TestCase):
                 self.assertEqual(pub_date, self.post.pub_date)
 
     def test_post_create_and_edit_page_show_correct_context(self):
-        """Проверяем, что шаблоны с формами сформированы с правильным контекстом."""
+        """Проверяем, что шаблоны с формами сформированы с правильным
+        контекстом."""
         reverses = (
             reverse('posts:post_create'),
             reverse('posts:post_edit', kwargs={'post_id': self.post.id}),
@@ -111,12 +112,12 @@ class PostPagesTests(TestCase):
             reverse(
                 'posts:profile',
                 kwargs={'username': self.post.author.username}
-                ): Post.objects.filter(author=self.post.author),
+            ): Post.objects.filter(author=self.post.author),
         }
         for reverse_name, filters in reverses_filters_dict.items():
             with self.subTest(reverse_name=reverse_name):
                 self.assertTrue(filters.exists())
-        
+
     def test_post_does_not_exist_in_another_group(self):
         """Проверяем, что созданный пост не появился в другой группе."""
         self.assertFalse(Post.objects.filter(group=self.group2).exists())

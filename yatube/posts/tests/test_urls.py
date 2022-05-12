@@ -13,14 +13,14 @@ class PostURLTests(TestCase):
         super().setUpClass()
         cls.user = User.objects.create_user(username='auth')
         cls.group = Group.objects.create(
-            title = 'Текстовый заголовок',
-            description = 'Тестовое описание группы',
-            slug = 'test-slug'
+            title='Текстовый заголовок',
+            description='Тестовое описание группы',
+            slug='test-slug'
         )
         cls.post = Post.objects.create(
-            author = cls.user,
+            author=cls.user,
             text='Тестовый текст',
-            pub_date = 'Тестовая дата',
+            pub_date='Тестовая дата',
             group=cls.group,
         )
 
@@ -29,7 +29,6 @@ class PostURLTests(TestCase):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
-    
     def test_urls_uses_correct_template(self):
         """Проверяем, что URL-адрес использует соответствующий шаблон."""
         url_templates_names = {
@@ -84,12 +83,12 @@ class PostURLTests(TestCase):
             with self.subTest(address=address):
                 response = self.authorized_client.get(address)
                 self.assertEqual(response.status_code, expected_value)
-    
+
     def test_redirect_guest_users(self):
         """Тестируем редирект неавторизованных пользователей."""
         url_redirectedurl_dict = {
             '/create/': '/auth/login/?next=/create/',
-            f'/posts/{self.post.id}/edit/': 
+            f'/posts/{self.post.id}/edit/':
                 f'/auth/login/?next=/posts/{self.post.id}/edit/',
         }
         for address, expected_redirect in url_redirectedurl_dict.items():

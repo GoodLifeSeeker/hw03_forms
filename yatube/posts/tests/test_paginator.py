@@ -13,18 +13,18 @@ class PaginatorViewsTest(TestCase):
         super().setUpClass()
         cls.user = User.objects.create_user(username='auth')
         cls.group = Group.objects.create(
-            title = 'Текстовая группа',
-            description = 'Тестовое описание',
-            slug = 'test-slug'
+            title='Текстовая группа',
+            description='Тестовое описание',
+            slug='test-slug'
         )
         for i in range(13):
             cls.post = Post.objects.create(
-                author = cls.user,
+                author=cls.user,
                 text=f'Текст поста {i}',
-                pub_date = 'Тестовая дата',
+                pub_date='Тестовая дата',
                 group=cls.group,
             )
-    
+
     def setUp(self):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)

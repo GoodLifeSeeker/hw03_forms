@@ -14,9 +14,9 @@ class PostFormsTest(TestCase):
         super().setUpClass()
         cls.user = User.objects.create_user(username='auth')
         cls.group = Group.objects.create(
-            title = 'Тестовая группа раз',
-            description = 'Тестовое описание группы',
-            slug = 'test-slug'
+            title='Тестовая группа раз',
+            description='Тестовое описание группы',
+            slug='test-slug'
         )
         cls.form = PostForm()
 
@@ -25,7 +25,8 @@ class PostFormsTest(TestCase):
         self.authorized_client.force_login(self.user)
 
     def test_create_and_edit_post(self):
-        """ПРоверяем, что форма создает, а повторная форма - изменяет запись в Post."""
+        """Проверяем, что форма создает, а повторная форма - изменяет запись
+        в Post."""
         tasks_count = Post.objects.count()
         form_data = {
             'text': 'Тестовый текст',
@@ -35,8 +36,11 @@ class PostFormsTest(TestCase):
             data=form_data,
             follow=True
         )
-        self.assertEqual(Post.objects.count(), tasks_count+1)
-        self.assertRedirects(response, reverse('posts:profile', kwargs={'username': self.user.username}))
+        self.assertEqual(Post.objects.count(), tasks_count + 1)
+        self.assertRedirects(
+            response,
+            reverse('posts:profile', kwargs={'username': self.user.username})
+        )
         form_data_changed = {
             'text': 'Тестовый текст2',
         }
@@ -45,5 +49,8 @@ class PostFormsTest(TestCase):
             data=form_data_changed,
             follow=True
         )
-        self.assertEqual(Post.objects.count(), tasks_count+1)
-        self.assertRedirects(response, reverse('posts:post_detail', kwargs={'post_id': 1}))
+        self.assertEqual(Post.objects.count(), tasks_count + 1)
+        self.assertRedirects(
+            response,
+            reverse('posts:post_detail', kwargs={'post_id': 1})
+        )
