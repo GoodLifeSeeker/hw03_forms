@@ -1,11 +1,11 @@
 {% extends "base_dives.html" %}
 {% block title %}
-  {{ posts.text|truncatechars:30 }}
+  {{ post.text|truncatechars:30 }}
 {% endblock %}
 {% block cardheader %}
-  <h2><p>Всего постов пользователя: <span>{{ posts.author.posts.count }}</span></p></h2>
+  <h2><p>Всего постов пользователя: <span>{{ post.author.post.count }}</span></p></h2>
   Текущий пост: <br>
 {% endblock %}
 {% block cardbody %}
-  {{ posts.text }}
+  {{ post.text }}
 {% endblock %}
